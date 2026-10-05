@@ -1,0 +1,79 @@
+import numpy as np
+from datetime import datetime, timedelta
+import scipy.spatial
+
+#Task 1:
+vector = np.arange(10, 50)
+print(vector)
+reversed_vector = vector[::-1]
+print(reversed_vector)
+
+#Task 2:
+random_array = np.random.rand(5, 5)
+print(f"Min: {random_array.min()} | Max: {random_array.max()}")
+
+#Task 3:
+matrix = np.random.rand(5, 5)
+min, max = matrix.min(), matrix.max()
+normalized_matrix = (matrix - min) / (max- min)
+print(normalized_matrix)
+
+#Task 4: 
+matrix_A = np.random.rand(5, 3)
+matrix_B = np.random.rand(3, 2)
+multiplication_result = matrix_A @ matrix_B
+print("Result:\n", multiplication_result)
+
+#Task 5:
+today = datetime.now().date()
+yesterday = today - timedelta(days=1)
+tomorrow = today + timedelta(days=1)
+print(f"Yesterday: {yesterday} | Today: {today} | Tomorrow: {tomorrow}")
+
+#Task 7:
+data_type= np.dtype([
+    ('position', [('x', float), ('y', float)]),
+    ('color',    [('r', int), ('g', int), ('b', int)])
+])
+structured_array = np.zeros(3, dtype=data_type)
+print("Structured Array:\n", structured_array)
+
+#Task8:
+generator = (x for x in range(10)) 
+gen_array = np.fromiter(generator, dtype=int)
+print("Array:\n", gen_array)
+
+#Task 9:
+A = np.random.randint(0, 2, 5)
+B = np.random.randint(0, 2, 5)
+are_equal = np.array_equal(A, B)
+print(f"A: {A} | B: {B} | Equal? {are_equal}")
+
+#Task 10:
+coordinates = np.random.rand(100, 2)
+distances = scipy.spatial.distance.cdist(coordinates, coordinates)
+print("Coordinates shape:", coordinates.shape)
+print("Distances matrix shape:", distances.shape)
+
+#Task 11
+matrix_r4 = np.random.rand(3, 4)
+row_means = matrix_r4.mean(axis=1, keepdims=True)
+centered_matrix = matrix_r4 - row_means
+print(centered_matrix)
+
+#Task 12:
+array_to_sort = np.random.randint(0, 10, (5, 3))
+n = 1  
+sorted_array = array_to_sort[array_to_sort[:, n].argsort()]
+print(sorted_array)
+
+#Task13:
+matrix_for_rank = np.random.rand(3, 3)
+rank = np.linalg.matrix_rank(matrix_for_rank)
+print("Rank:", rank)
+
+# Task 14:
+Z = np.ones((16, 16))
+block_size = 4
+block_sum = Z.reshape(16 // block_size, block_size, 16 // block_size, block_size).sum(axis=(1, 3))
+print( block_sum)
