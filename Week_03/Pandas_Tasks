@@ -1,0 +1,54 @@
+import pandas as pd
+import numpy as np
+
+if __name__ == "__main__":
+    
+    # 1
+    df = pd.read_csv('Cars93_missing.csv')
+    print("First 5 rows:\n", df.head())
+
+    # 2
+    first_col = df.columns[0]
+    df.set_index(first_col, inplace=True)
+    print(f"'{first_col}' is set as index:\n", df.head())
+
+    # 3
+    numeric_col = df.select_dtypes(include=[np.number]).columns[0]
+    mean_val = df[numeric_col].mean()
+    df.loc[df[numeric_col] > mean_val, numeric_col] = mean_val
+    print(f"Values greater than mean in '{numeric_col}' are set to mean:\n", df[[numeric_col]].head())
+
+    # 4
+    print("Columns:", df.columns.tolist())
+    print("Sum of Missing Values:\n", df.isnull().sum())
+
+    # 5
+    def swap_columns(dataframe, col1, col2):
+        """Function to exchange two columns"""
+        cols = list(dataframe.columns)
+        a, b = cols.index(col1), cols.index(col2)
+        cols[b], cols[a] = cols[a], cols[b]
+        return dataframe[cols]
+
+    if len(df.columns) >= 2:
+        c1, c2 = df.columns[0], df.columns[1]
+        df = swap_columns(df, c1, c2)
+        print(f"Swapped '{c1}' and '{c2}':\n", df.head())
+    
+
+    df = df.reindex(sorted(df.columns), axis=1)
+    print("\nSorting Columns by Name:\n", df.head())
+
+    # 6
+    numeric_col2 = df.select_dtypes(include=[np.number]).columns[0]
+    low_quantile = df[numeric_col2].quantile(0.05)
+    high_quantile = df[numeric_col2].quantile(0.95)
+    
+   
+    df = df[(df[numeric_col2] >= low_quantile) & (df[numeric_col2] <= high_quantile) | df[numeric_col2].isnull()]
+    print(f"New shape: {df.shape}")
+
+    # 7
+    numeric_cols = df.select_dtypes(include=[np.number]).columns
+    df[numeric_cols] = df[numeric_cols].fillna(df[numeric_cols].mean())
+    print("Missing values :\n", df.isnull().sum())
